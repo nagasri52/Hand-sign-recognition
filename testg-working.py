@@ -9,12 +9,14 @@ from torchvision import models
 
 # Load the trained PyTorch model
 # model_path = r"C:\Users\nagas\OneDrive\Desktop\New folder\Models\indian_sign_language_resnet1.pth"
-model_path = r"C:\Users\nagas\OneDrive\Desktop\New folder\Models\indian_sign_language_resnet2.pth"
+model_path = r"C:\Users\nagas\OneDrive\Desktop\New folder\Models\indian_sign_language_resnet3.pth"
+
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Load ResNet50 model structure and weights
 model = models.resnet50(pretrained=False)
-num_classes = 36  # Adjust based on your dataset
+num_classes = 26  # Adjust based on your dataset
 model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
 model.load_state_dict(torch.load(model_path, map_location=device))
 model.eval().to(device)
@@ -71,7 +73,7 @@ while True:
                 imgWhite[hGap:hCal + hGap, :] = imgResize
             
             # Convert OpenCV image to PIL, apply transformations, and predict
-            img_pil = Image.fromarray(cv2.cvtColor(imgWhite, cv2.COLOR_BGR2RGB))
+            img_pil = Image.fromarray(cv2.cvtColor(imgCrop, cv2.COLOR_BGR2RGB))
             img_tensor = transform(img_pil).unsqueeze(0).to(device)
             
             with torch.no_grad():
